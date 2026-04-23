@@ -2,6 +2,7 @@ import {
   CreateEventSchema,
   JoinEventSchema,
   LeaveEventSchema,
+  UpdateEventSchema,
 } from "@/shared/api";
 import { prisma } from "../db";
 import { isAuth, procedure, router } from "../trpc";
@@ -21,11 +22,7 @@ export const eventRouter = router({
     }));
   }),
   findUnique: procedure
-    .input(
-      z.object({
-        id: z.number(),
-      }),
-    )
+    .input(z.object({ id: z.number() }))
     .use(isAuth)
     .query(({ input }) => {
       return prisma.event.findUnique({
@@ -34,6 +31,7 @@ export const eventRouter = router({
           title: true,
           description: true,
           date: true,
+          authorId: true,
           participations: {
             select: {
               user: {
@@ -82,5 +80,31 @@ export const eventRouter = router({
       });
 
       return { success: true };
+    }),
+  update: procedure
+    .input(UpdateEventSchema)
+    .use(isAuth)
+    .mutation(async ({ input, ctx: { user } }) => {
+      const event = await prisma.event.findUnique({
+        where: { id: input.id },
+        select: { authorId: true },
+      });
+
+      if (!event) {
+        throw new Error("Событие не найдено");
+      }
+
+      if (event.authorId !== user.id) {
+        throw new Error("Вы можете редактировать только свои события");
+      }
+
+      return prisma.event.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          description: input.description,
+          date: input.date,
+        },
+      });
     }),
 });
