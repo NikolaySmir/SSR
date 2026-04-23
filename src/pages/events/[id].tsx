@@ -5,23 +5,32 @@ import { useSession } from "next-auth/react";
 
 export default function Event() {
   const router = useRouter();
-  const session = useSession();
+  const { data: session, status } = useSession();
 
-  const { data, isLoading } = trpc.event.findUnique.useQuery({
-    id: Number(router.query.id),
-  });
+  const eventId = Number(router.query.id);
+
+  const { data, isLoading } = trpc.event.findUnique.useQuery(
+    { id: eventId },
+    { enabled: !isNaN(eventId) },
+  );
+
+  if (isNaN(eventId)) {
+    return "Неверный идентификатор события";
+  }
 
   if (isLoading) {
     return "Loading...";
   }
 
-  if (session.status === "unauthenticated") {
+  if (status === "unauthenticated") {
     return "Forbidden";
   }
 
   if (!data) {
-    return "No data";
+    return "Событие не найдено";
   }
 
-  return <EventDetail {...data} />;
+  return (
+    <EventDetail id={eventId} {...data} currentUserId={session?.user?.id} />
+  );
 }
