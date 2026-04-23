@@ -42,6 +42,10 @@ export const EventDetail = ({
     return (
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
+          <h2 className="text-xl font-medium text-gray-600 mb-4">Событие</h2>
+        </div>
+
+        <div className="max-w-[66%]">
           <label className="block text-sm font-medium text-gray-700">
             Название
           </label>
@@ -64,9 +68,12 @@ export const EventDetail = ({
             rows={4}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
+          <p className="mt-4 text-sm text-gray-500">
+            Напишите несколько предложений о предстоящем мероприятии
+          </p>
         </div>
 
-        <div>
+        <div className="w-auto inline-block">
           <label className="block text-sm font-medium text-gray-700">
             Дата проведения
           </label>
@@ -74,25 +81,25 @@ export const EventDetail = ({
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-auto rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
           />
         </div>
 
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            disabled={updateMutation.isLoading}
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50"
-          >
-            {updateMutation.isLoading ? "Сохранение..." : "Сохранить"}
-          </button>
+        <div className="flex gap-3 justify-end">
           <button
             type="button"
             onClick={() => setIsEditing(false)}
             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
             Отмена
+          </button>
+          <button
+            type="submit"
+            disabled={updateMutation.isLoading}
+            className="rounded-md bg-[#2b6cec] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#1e5ad4] disabled:opacity-50 transition"
+          >
+            {updateMutation.isLoading ? "Обновление..." : "Обновить"}
           </button>
         </div>
       </form>
@@ -117,9 +124,9 @@ export const EventDetail = ({
           <div className="mb-4 flex justify-end">
             <button
               onClick={() => setIsEditing(true)}
-              className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              className="rounded-md bg-[#2b6cec] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#1e5ad4] transition"
             >
-              Редактировать
+              Редактировать событие
             </button>
           </div>
         )}
