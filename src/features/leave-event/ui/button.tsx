@@ -17,7 +17,7 @@ export const LeaveEventButton = ({
 
   return (
     <button
-      className="h-10 px-6 font-semibold rounded-md border border-red-500 text-red-500 hover:bg-red-50"
+      className="h-10 px-6 font-semibold rounded-md bg-[#ed5250] text-white hover:bg-[#d43f3d] transition"
       onClick={handleClick}
     >
       Покинуть
