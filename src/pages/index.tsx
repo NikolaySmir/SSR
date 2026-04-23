@@ -7,7 +7,7 @@ export default function Home() {
   const { data, refetch } = trpc.event.findMany.useQuery();
 
   return (
-    <ul>
+    <ul style={{ overflow: "auto" }}>
       {data?.map((event) => (
         <li key={event.id} className="mb-6">
           <EventCard
